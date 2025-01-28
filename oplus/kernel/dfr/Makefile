@@ -3,33 +3,19 @@
 
 # Qcom platform feature
 
-#ifdef OPLUS_FEATURE_PMIC_MONITOR
-obj-$(CONFIG_OPLUS_FEATURE_PMIC_MONITOR) += qcom/qcom_pmic_monitor/
-#endif /* OPLUS_FEATURE_PMIC_MONITOR */
+obj-y += qcom/qcom_pmic_monitor/
 
-#ifdef OPLUS_FEATURE_FORCE_SHUTDOWN
-obj-$(CONFIG_OPLUS_FEATURE_FORCE_SHUTDOWN) += qcom/force_shutdown/
-#endif /* OPLUS_FEATURE_FORCE_SHUTDOWN */
+obj-y += qcom/force_shutdown/
 
-#ifdef OPLUS_FEATURE_QCOM_PMICWD
-obj-$(CONFIG_OPLUS_FEATURE_QCOM_PMICWD) += qcom/qcom_pmicwd/
-#endif /* OPLUS_FEATURE_QCOM_PMICWD */
+obj-y += qcom/qcom_pmicwd/
 
-#ifdef OPLUS_FEATURE_QCOM_WATCHDOG
-obj-$(CONFIG_OPLUS_FEATURE_QCOM_WATCHDOG) += qcom/qcom_watchdog/
-#endif /* OPLUS_FEATURE_QCOM_WATCHDOG */
+obj-y += qcom/qcom_watchdog/
 
-#ifdef OPLUS_FEATURE_DUMP_DEVICE_INFO
-obj-$(CONFIG_OPLUS_FEATURE_DUMP_DEVICE_INFO)	+=  qcom/dump_device_info/
-#endif /* OPLUS_FEATURE_DUMP_DEVICE_INFO */
+obj-y	+=  qcom/dump_device_info/
 
-#ifdef OPLUS_FEATURE_DUMP_REASON
-obj-$(CONFIG_OPLUS_FEATURE_DUMP_REASON)	+=  qcom/dump_reason/
-#endif /* OPLUS_FEATURE_DUMP_REASON */
+obj-y	+=  qcom/dump_reason/
 
-#ifdef OPLUS_FEATURE_FULLDUMP_BACK
-obj-$(CONFIG_OPLUS_FEATURE_FULLDUMP_BACK) += qcom/oplus_ordump/
-#endif /* OPLUS_FEATURE_FULLDUMP_BACK */
+obj-y += qcom/oplus_ordump/
 
 
 # MTK platform feature
@@ -64,7 +50,7 @@ obj-$(CONFIG_OPLUS_FEATURE_INIT_WATCHDOG) += common/init_watchdog/
 #endif /* OPLUS_FEATURE_INIT_WATCHDOG */
 
 #ifdef OPLUS_FEATURE_KEYEVENT_HANDLER
-obj-$(CONFIG_OPLUS_FEATURE_KEYEVENT_HANDLER) += common/keyevent_handler/
+obj-y += common/keyevent_handler/
 #endif /* OPLUS_FEATURE_KEYEVENT_HANDLER */
 
 #ifdef OPLUS_FEATURE_COMBKEY_MONITOR
