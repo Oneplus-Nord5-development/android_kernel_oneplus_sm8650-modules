@@ -7,5 +7,5 @@
 
 oplus_bsp_tp_ft3658u-y += ft3658u_driver.o
 oplus_bsp_tp_ft3658u-y += ft3658u_test.o
-obj-m += oplus_bsp_tp_ft3658u.o
+# obj-m += oplus_bsp_tp_ft3658u.o
 

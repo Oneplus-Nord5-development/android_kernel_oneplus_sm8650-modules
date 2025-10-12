@@ -9,7 +9,7 @@
 #obj-$(CONFIG_TOUCHPANEL_NOVA_NT36525_NOFLASH) += NT36525_noflash/
 
 obj-y += NT36672C_noflash/
-obj-y += NT36523_noflash/
+# obj-y += NT36523_noflash/
 obj-y += NT36532_noflash/
 obj-y += NT36536_noflash/
 obj-y += NT36528_noflash/

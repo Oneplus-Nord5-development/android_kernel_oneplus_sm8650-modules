@@ -9,7 +9,7 @@
 
 
 obj-y += ft3518/
-obj-y += ft3658u/
+# obj-y += ft3658u/
 obj-y += ft3658u_spi/
 obj-y += ft3681/
 obj-y += ft8057p/
