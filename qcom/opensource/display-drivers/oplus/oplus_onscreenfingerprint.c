@@ -3979,6 +3979,7 @@ static int oplus_ofp_aod_off_set(void)
 int oplus_ofp_touchpanel_event_notifier_call(struct notifier_block *nb, unsigned long action, void *data)
 {
 	struct touchpanel_event *tp_event = (struct touchpanel_event *)data;
+	struct oplus_ofp_params *p_oplus_ofp_params = oplus_ofp_get_params(oplus_ofp_display_id);
 
 	OFP_DEBUG("start\n");
 
@@ -3992,6 +3993,17 @@ int oplus_ofp_touchpanel_event_notifier_call(struct notifier_block *nb, unsigned
 	if (tp_event) {
 		if (action == EVENT_ACTION_FOR_FINGPRINT) {
 			OFP_DEBUG("EVENT_ACTION_FOR_FINGPRINT\n");
+			if (p_oplus_ofp_params && p_oplus_ofp_params->uiready_event_wq) {
+			if (!queue_work(p_oplus_ofp_params->uiready_event_wq,
+							&p_oplus_ofp_params->uiready_event_work)) {
+				pr_info("oplus_ofp: uiready work was already queued\n");
+			} else {
+				pr_info("oplus_ofp: queued early UIReady work on dedicated wq\n");
+			}
+			} else {
+				pr_warn("oplus_ofp: uiready wq missing, falling back to system_wq\n");
+				schedule_work(&p_oplus_ofp_params->uiready_event_work);
+			}
 
 			if (tp_event->touch_state == 1) {
 				OFP_INFO("tp touchdown\n");
