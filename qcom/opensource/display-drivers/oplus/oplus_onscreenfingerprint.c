@@ -955,6 +955,7 @@ static int oplus_ofp_panel_cmd_set_nolock(void *dsi_panel, enum dsi_cmd_set_type
 
 	case DSI_CMD_LHBM_PRESSED_ICON_PWM:
 		oplus_ofp_set_hbm_state(true);
+		rc = dsi_panel_set_backlight(panel, OPLUS_OFP_900NIT_DBV_LEVEL);
 		break;
 	case DSI_CMD_LHBM_PRESSED_ICON_ON:
 		oplus_ofp_set_hbm_state(true);
@@ -4004,6 +4005,20 @@ int oplus_ofp_touchpanel_event_notifier_call(struct notifier_block *nb, unsigned
 				pr_warn("oplus_ofp: uiready wq missing, falling back to system_wq\n");
 				schedule_work(&p_oplus_ofp_params->uiready_event_work);
 			}
+
+			struct dsi_display *d = oplus_display_get_current_display();
+			struct dsi_panel *p;
+
+			p = d->panel;
+
+			if (oplus_ofp_display_cmd_set(d, DSI_CMD_LHBM_PRESSED_ICON_ON))
+				pr_err("oplus_ofp: failed to send LHBM ON\n");
+			
+			mutex_lock(&p->panel_lock);
+			int rc = dsi_panel_set_backlight(p, OPLUS_OFP_900NIT_DBV_LEVEL);
+			mutex_unlock(&p->panel_lock);
+			if (rc)
+					pr_err("oplus_ofp: failed to set HBM level rc=%d\n", rc);
 
 			if (tp_event->touch_state == 1) {
 				OFP_INFO("tp touchdown\n");
