@@ -4009,6 +4009,7 @@ int oplus_ofp_touchpanel_event_notifier_call(struct notifier_block *nb, unsigned
 			struct dsi_display *d = oplus_display_get_current_display();
 			struct dsi_panel *p;
 
+			if (d && d->panel && d->panel->power_mode == SDE_MODE_DPMS_ON) {
 			p = d->panel;
 
 			if (oplus_ofp_display_cmd_set(d, DSI_CMD_LHBM_PRESSED_ICON_ON))
@@ -4019,7 +4020,7 @@ int oplus_ofp_touchpanel_event_notifier_call(struct notifier_block *nb, unsigned
 			mutex_unlock(&p->panel_lock);
 			if (rc)
 					pr_err("oplus_ofp: failed to set HBM level rc=%d\n", rc);
-
+			}
 			if (tp_event->touch_state == 1) {
 				OFP_INFO("tp touchdown\n");
 				/* send aod off cmds in doze mode to speed up fingerprint unlocking */
