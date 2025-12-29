@@ -595,6 +595,7 @@ bool oplus_ofp_local_hbm_unlocking_acceleration_is_enabled(void)
 		return false;
 	}
 
+    OFP_DEBUG("lexus: local hbm unlocking acceleration is on\n");
 	return (bool)(OPLUS_OFP_GET_LOCAL_HBM_UNLOCKING_ACCELERATION_CONFIG(p_oplus_ofp_params->fp_type));
 }
 
@@ -1408,6 +1409,7 @@ int oplus_ofp_lhbm_pressed_icon_gamma_update_NT37707(void *dsi_display)
 	struct dsi_cmd_desc *cmds = NULL;
 	struct oplus_ofp_params *p_oplus_ofp_params = oplus_ofp_get_params(oplus_ofp_display_id);
 
+    OFP_DEBUG("lexus: Init oplus_ofp_lhbm_pressed_icon_gamma_update_NT37707\n");
 	if (!oplus_ofp_local_hbm_is_enabled()) {
 		OFP_DEBUG("local hbm is not enabled, no need to update lhbm pressed icon gamma\n");
 		return 0;
@@ -1424,6 +1426,7 @@ int oplus_ofp_lhbm_pressed_icon_gamma_update_NT37707(void *dsi_display)
 	}
 
 	seed_mode = __oplus_get_seed_mode();
+    OFP_DEBUG("lexus: seed_mode=%d\n", seed_mode);
 	if (seed_mode == PANEL_LOADING_EFFECT_MODE1) {
 		loading_effect = 425;
 	} else if (seed_mode == PANEL_LOADING_EFFECT_MODE2) {
@@ -1456,7 +1459,7 @@ int oplus_ofp_lhbm_pressed_icon_gamma_update_NT37707(void *dsi_display)
 			OFP_ERR("failed to read panel reg 0xB5, rc=%d\n", rc);
 			goto error;
 		}
-		OFP_INFO("lhbm pressed icon b5:0x%02X, 0x%02X\n", rx_buf_G[0], rx_buf_G[1]);
+		OFP_DEBUG("lhbm pressed icon b5:0x%02X, 0x%02X\n", rx_buf_G[0], rx_buf_G[1]);
 		rc = oplus_ofp_display_cmd_set(display, DSI_CMD_PANEL_READ_REGISTER_OPEN);
 		if (rc) {
 			OFP_ERR("[%s] failed to send DSI_CMD_PANEL_READ_REGISTER_OPEN cmds, rc=%d\n", display->name, rc);
@@ -1467,7 +1470,7 @@ int oplus_ofp_lhbm_pressed_icon_gamma_update_NT37707(void *dsi_display)
 			OFP_ERR("failed to read panel reg 0xB5, rc=%d\n", rc);
 			goto error;
 		}
-		OFP_INFO("lhbm pressed icon b8:0x%02X, 0x%02X\n", rx_buf_B[0], rx_buf_B[1]);
+		OFP_DEBUG("lhbm pressed icon b8:0x%02X, 0x%02X\n", rx_buf_B[0], rx_buf_B[1]);
 
 		extrapolated_value[0] = 0xD1;
 		extrapolated_value[1] = (((rx_buf_R[0] << 8) | rx_buf_R[1]) * loading_effect / 100U) >> 8;
@@ -1487,7 +1490,10 @@ int oplus_ofp_lhbm_pressed_icon_gamma_update_NT37707(void *dsi_display)
 		}
 		calibrated = true;
 		OFP_INFO("update lhbm pressed icon gamma successfully\n");
-	}
+	} else {
+        OFP_DEBUG("lhbm pressed icon gamma either already calibrated or failed to calibrate\n");
+    }
+
 	if (calibrated) {
 		cmds = display->panel->cur_mode->priv_info->cmd_sets[DSI_CMD_LHBM_PRESSED_ICON_GAMMA_NT37707].cmds;
 		lcm_cmd_count = display->panel->cur_mode->priv_info->cmd_sets[DSI_CMD_LHBM_PRESSED_ICON_GAMMA_NT37707].count;
@@ -4872,9 +4878,13 @@ ssize_t oplus_ofp_set_hbm_attr(struct kobject *obj,
 	if (oplus_ofp_local_hbm_is_enabled()) {
 		if (p_oplus_ofp_params->hbm_mode) {
 			if(p_oplus_ofp_params->need_to_update_lhbm_pressed_icon_gamma_nt37707) {
+                OFP_DEBUG("lexus: Calling oplus_ofp_lhbm_pressed_icon_gamma_NT37707_enable\n");
 				/* update gamma and grayscale for NT37707 */
 				oplus_ofp_lhbm_pressed_icon_gamma_NT37707_enable(display);
-			} else {
+			} else if (p_oplus_ofp_params->need_to_update_lhbm_pressed_icon_gamma_nt37707) {
+                OFP_DEBUG("lexus: Calling oplus_ofp_lhbm_pressed_icon_gamma_NT37707_enable forcefully\n");
+				oplus_ofp_lhbm_pressed_icon_gamma_NT37707_enable(display);
+            } else {
 				if (display->panel->oplus_priv.vendor_name && !strcmp(display->panel->oplus_priv.vendor_name, "AC223")) {
 					rc = oplus_ofp_lhbm_dbv_vdc_update(display->panel, oplus_last_backlight, true);
 					if (rc) {
@@ -5231,6 +5241,7 @@ ssize_t oplus_ofp_notify_fp_press_attr(struct kobject *obj,
 /* update lhbm parameters for NT37707 */
 int oplus_ofp_lhbm_pressed_icon_gamma_NT37707_enable(void *dsi_display)
 {
+    OFP_DEBUG("lexus: init oplus_ofp_lhbm_pressed_icon_gamma_NT37707_enable");
 	int rc = 0;
 	struct dsi_display *display = dsi_display;
 	struct oplus_ofp_params *p_oplus_ofp_params = oplus_ofp_get_params(oplus_ofp_display_id);
