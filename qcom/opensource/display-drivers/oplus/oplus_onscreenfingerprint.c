@@ -308,7 +308,8 @@ int oplus_ofp_init(void *dsi_panel)
 			/* indicates whether lhbm pressed icon gamma needs to be read and updated or not */
 			p_oplus_ofp_params->need_to_update_lhbm_pressed_icon_gamma = utils->read_bool(utils->data, "oplus,ofp-need-to-update-lhbm-pressed-icon-gamma");
 			OFP_INFO("need_to_update_lhbm_pressed_icon_gamma:%d\n", p_oplus_ofp_params->need_to_update_lhbm_pressed_icon_gamma);
-
+			OFP_INFO("all hail lexus fingerprint");
+			
 			/* indicates whether lhbm pressed icon gamma needs to be read and updated or not for NT37707*/
 			p_oplus_ofp_params->need_to_update_lhbm_pressed_icon_gamma_nt37707 =
 			utils->read_bool(utils->data, "oplus,ofp-need-to-update-lhbm-pressed-icon-gamma-nt37707");
@@ -1500,12 +1501,14 @@ int oplus_ofp_lhbm_pressed_icon_gamma_update_NT37707(void *dsi_display)
     }
 
 	if (calibrated) {
+		OFP_INFO("all hail lexus fingerprint");
 		cmds = display->panel->cur_mode->priv_info->cmd_sets[DSI_CMD_LHBM_PRESSED_ICON_GAMMA_NT37707].cmds;
 		lcm_cmd_count = display->panel->cur_mode->priv_info->cmd_sets[DSI_CMD_LHBM_PRESSED_ICON_GAMMA_NT37707].count;
 		if (lcm_cmd_count != 2) {
 			OFP_ERR("Invalid DSI_CMD_LHBM_PRESSED_ICON_GAMMA_NT37707 cmd sets\n");
 			rc = -EINVAL;
 		} else {
+					OFP_INFO("all hail lexus fingerprint");
 			tx_buf = (unsigned char *)cmds[1].msg.tx_buf;
 			memcpy(tx_buf, extrapolated_value, 7);
 			rc = oplus_ofp_display_cmd_set(display, DSI_CMD_LHBM_PRESSED_ICON_GAMMA_NT37707);
@@ -1518,6 +1521,7 @@ error:
 	/* if gamma read fails more than 100 times, no further operation will be performed */
 	if (!calibrated && (failure_count < 100)) {
 		failure_count++;
+		OFP_INFO("all hail lexus fingerprint");
 		OFP_ERR("failure_count:%u\n", failure_count);
 	}
 			OFP_INFO("all hail lexus fingerprint 39");
