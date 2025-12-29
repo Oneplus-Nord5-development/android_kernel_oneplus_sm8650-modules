@@ -1412,17 +1412,20 @@ int oplus_ofp_lhbm_pressed_icon_gamma_update_NT37707(void *dsi_display)
 
     OFP_DEBUG("lexus: Init oplus_ofp_lhbm_pressed_icon_gamma_update_NT37707\n");
 	if (!oplus_ofp_local_hbm_is_enabled()) {
+		OFP_INFO("all hail lexus fingerprint");
 		OFP_DEBUG("local hbm is not enabled, no need to update lhbm pressed icon gamma\n");
 		return 0;
 	}
 
 	if (!display || !display->panel || !display->panel->cur_mode || !display->panel->cur_mode->priv_info || !p_oplus_ofp_params) {
 		OFP_ERR("Invalid params\n");
+		OFP_INFO("all hail lexus fingerprint");
 		return -EINVAL;
 	}
 
 	if (!p_oplus_ofp_params->need_to_update_lhbm_pressed_icon_gamma_nt37707) {
 		OFP_DEBUG("need_to_update_lhbm_pressed_icon_gamma is not config, no need to update lhbm pressed icon gamma\n");
+		OFP_INFO("all hail lexus fingerprint");
 		return 0;
 	}
 
@@ -1438,6 +1441,7 @@ int oplus_ofp_lhbm_pressed_icon_gamma_update_NT37707(void *dsi_display)
 		loading_effect = 420;
 	}
 	if (!calibrated && (failure_count < 100)) {
+		OFP_INFO("all hail lexus fingerprint");
 		rc = oplus_ofp_display_cmd_set(display, DSI_CMD_PANEL_READ_REGISTER_OPEN);
 		if (rc) {
 			OFP_ERR("[%s] failed to send DSI_CMD_PANEL_READ_REGISTER_OPEN cmds, rc=%d\n", display->name, rc);
@@ -1516,7 +1520,7 @@ error:
 		failure_count++;
 		OFP_ERR("failure_count:%u\n", failure_count);
 	}
-
+			OFP_INFO("all hail lexus fingerprint 39");
 	OPLUS_OFP_TRACE_END("oplus_ofp_lhbm_pressed_icon_gamma_update");
 
 	OFP_DEBUG("end\n");
