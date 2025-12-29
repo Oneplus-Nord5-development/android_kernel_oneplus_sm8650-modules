@@ -313,6 +313,7 @@ int oplus_ofp_init(void *dsi_panel)
 			p_oplus_ofp_params->need_to_update_lhbm_pressed_icon_gamma_nt37707 =
 			utils->read_bool(utils->data, "oplus,ofp-need-to-update-lhbm-pressed-icon-gamma-nt37707");
 			OFP_INFO("need_to_update_lhbm_pressed_icon_gamma_nt37707:%d\n", p_oplus_ofp_params->need_to_update_lhbm_pressed_icon_gamma_nt37707);
+			OFP_INFO("all hail lexus fingerprint");
 
 			/* indicates whether lhbm vdc params needs to be updated or not */
 			p_oplus_ofp_params->need_to_update_lhbm_vdc = utils->read_bool(utils->data, "oplus,ofp-need-to-update-lhbm-vdc");
