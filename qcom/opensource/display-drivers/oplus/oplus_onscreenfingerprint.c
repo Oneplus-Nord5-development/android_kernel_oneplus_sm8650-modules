@@ -747,7 +747,6 @@ int oplus_ofp_property_update(void *sde_connector, void *sde_connector_state, in
 	struct sde_connector *c_conn = sde_connector;
 	struct sde_connector_state *c_state = sde_connector_state;
 	struct oplus_ofp_params *p_oplus_ofp_params = oplus_ofp_get_params(oplus_ofp_display_id);
-	int rc = 0;
 
 	OFP_DEBUG("start\n");
 
@@ -766,13 +765,11 @@ int oplus_ofp_property_update(void *sde_connector, void *sde_connector_state, in
 	switch (prop_id) {
 	case CONNECTOR_PROP_HBM_ENABLE:
 		if (prop_val != p_oplus_ofp_params->hbm_enable) {
-            if (!prop_val && lexus_panel_flag) {
-                OFP_INFO("HBM_DISABLE:%lu, notify fppress up\n", prop_val);
-                uint32_t fp_press = 0;
-                rc = oplus_ofp_notify_fp_press(&fp_press);
-                if (rc)
-                    OFP_ERR("failed to notify fp up event, rc=%d\n", rc);
-            }
+			if (!prop_val && p_oplus_ofp_params->hbm_enable && oplus_ofp_local_hbm_is_enabled()) {
+				OFP_INFO("hbm_enable: notify fp_press=0\n");
+				unsigned int fp_press = 0;
+				oplus_ofp_notify_fp_press(&fp_press);
+			}
 			OFP_INFO("HBM_ENABLE:%lu,dim:%lu,fingerpress:%lu,icon:%lu,aod:%lu\n", prop_val, (prop_val & OPLUS_OFP_PROPERTY_DIM_LAYER),
 				(prop_val & OPLUS_OFP_PROPERTY_FINGERPRESS_LAYER), (prop_val & OPLUS_OFP_PROPERTY_ICON_LAYER),
 					(prop_val & OPLUS_OFP_PROPERTY_AOD_LAYER));
