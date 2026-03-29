@@ -7765,6 +7765,14 @@ static void cam_icp_mgr_free_hw_devs(struct cam_icp_hw_mgr *hw_mgr)
 	hw_mgr->icp_dev_intf = NULL;
 }
 
+static void cam_icp_mgr_release_proc_dev_arrays(struct cam_hw_intf ***devices)
+{
+	kfree(devices[CAM_ICP_HW_ICP_V1]);
+	devices[CAM_ICP_HW_ICP_V1] = NULL;
+	kfree(devices[CAM_ICP_HW_ICP_V2]);
+	devices[CAM_ICP_HW_ICP_V2] = NULL;
+}
+
 static int cam_icp_mgr_verify_hw_caps(struct cam_icp_hw_mgr *hw_mgr, uint32_t *icp_dev_mask,
 	uint32_t num_icp_dev_mask)
 {
@@ -7947,6 +7955,8 @@ static int cam_icp_mgr_set_up_dev_info(struct cam_icp_hw_mgr *hw_mgr,
 			hw_mgr->hw_mgr_name);
 		return -EINVAL;
 	}
+
+	cam_icp_mgr_release_proc_dev_arrays(devices);
 
 	for (i = CAM_ICP_DEV_START_IDX; i < CAM_ICP_HW_MAX; i++) {
 		if (hw_dev_cnt[i] > 0)
