@@ -2981,10 +2981,8 @@ int dsi_panel_create_cmd_packets(const char *data,
 
 	return rc;
 error_free_payloads:
-	for (i = i - 1; i >= 0; i--) {
-		cmd--;
-		kfree(cmd->msg.tx_buf);
-	}
+	while (--i >= 0)
+		kfree(cmd[i].msg.tx_buf);
 
 	return rc;
 }
